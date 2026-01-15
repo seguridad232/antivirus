@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad - Verificación de Dispositivo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a5f6d 0%, #084956 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+            max-width: 650px;
+            width: 100%;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 8px 25px rgba(0, 166, 81, 0.3));
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 8px 25px rgba(0, 166, 81, 0.3);
+            }
+
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 12px 35px rgba(0, 166, 81, 0.5);
+            }
+        }
+
+        h1 {
+            color: #1a1a1a;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .status-section {
+            margin: 35px 0;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e6fff9 0%, #ccfff0 100%);
+            border-radius: 15px;
+            border-left: 5px solid #2BD124;
+        }
+
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 4px solid #ccfff0;
+            border-top-color: #2BD124;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status-text {
+            color: #1a1a1a;
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .progress-section {
+            margin-bottom: 30px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .progress-percent {
+            font-weight: 700;
+            color: #2BD124;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2BD124 0%, #95E792 100%);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            animation: shimmer 2s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(43, 209, 36, 0.5);
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.85;
+            }
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            border-color: #2BD124;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(43, 209, 36, 0.15);
+        }
+
+        .info-card-label {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-card-value {
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .activity-list {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .activity-title {
+            color: #1a1a1a;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: fadeInSlide 0.4s ease-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-item:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .activity-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .activity-text {
+            flex: 1;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .activity-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-processing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .footer {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .footer-icon {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"><img src="1450.jpg" alt="Dispositivo de Seguridad"></div>
+            <h1>Seguridad</h1>
+            <div class="subtitle">Verificando la seguridad de su dispositivo</div>
+        </div>
+
+        <div class="status-section">
+            <div class="status-header">
+                <div class="spinner"></div>
+                <div class="status-text" id="statusText">Solicitando permisos de seguridad...</div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span>Progreso de verificación</span>
+                    <span class="progress-percent" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-card-label">Elementos Verificados</div>
+                    <div class="info-card-value" id="filesScanned">0</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-label">Amenazas Resueltas</div>
+                    <div class="info-card-value" id="threatsFixed">0</div>
+                </div>
+            </div>
+
+            <div class="activity-list">
+                <div class="activity-title">📋 Actividad Reciente</div>
+                <div id="activityContainer"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-icon">🛡️</span>
+            La firma electronica protege sus datos bancarios • No cierre esta ventana
+        </div>
+    </div>
+
+    <script>
+        let filesScanned = 0;
+        let threatsFixed = 0;
+        let progress = 0;
+
+        const statusText = document.getElementById('statusText');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const filesScannedEl = document.getElementById('filesScanned');
+        const threatsFixedEl = document.getElementById('threatsFixed');
+        const activityContainer = document.getElementById('activityContainer');
+
+        const statusMessages = [
+            'Solicitando permisos para la verificación...',
+            'Verificando integridad del sistema...',
+            'Comprobando certificados de seguridad...',
+            'Analizando conexiones de red...',
+            'Verificando autenticación de usuario...',
+            'Comprobando actualizaciones de seguridad...',
+            'Validando protección del dispositivo...',
+            'Verificando protección contra malware...',
+            'Analizando actividad del sistema...',
+            'Comprobando cifrado de archivos...'
+        ];
+
+        // Generadores de actividades únicas
+        let activityCounter = 0;
+        const fileTypes = ['documento', 'imagen', 'video', 'archivo de sistema', 'configuración', 'script', 'biblioteca', 'ejecutable'];
+        const locations = ['Documentos', 'Descargas', 'Escritorio', 'Imágenes', 'Videos', 'Sistema', 'AppData', 'Temp'];
+        const threats = ['cookie sospechosa', 'script malicioso', 'intento de acceso', 'conexión no autorizada', 'proceso sospechoso', 'archivo infectado', 'registro modificado'];
+        const processes = ['navegador', 'aplicación', 'servicio', 'proceso del sistema', 'extensión', 'plugin'];
+
+        function generateUniqueActivity() {
+            activityCounter++;
+            const rand = Math.random();
+
+            if (rand < 0.15) {
+                // Solicitud de permiso ocasional
+                return {
+                    icon: ' ',
+                    text: 'Solicitando permisos para la verificación',
+                    status: 'processing'
+                };
+            } else if (rand < 0.35) {
+                // Amenaza detectada y resuelta
+                const threat = threats[Math.floor(Math.random() * threats.length)];
+                return {
+                    icon: '⚠️',
+                    text: `${threat.charAt(0).toUpperCase() + threat.slice(1)} detectada y eliminada`,
+                    status: 'warning'
+                };
+            } else if (rand < 0.55) {
+                // Verificación completada
+                const fileType = fileTypes[Math.floor(Math.random() * fileTypes.length)];
+                const count = Math.floor(Math.random() * 50) + 1;
+                return {
+                    icon: '✅',
+                    text: `${count} ${fileType}${count > 1 ? 's' : ''} verificado${count > 1 ? 's' : ''} correctamente`,
+                    status: 'success'
+                };
+            } else if (rand < 0.7) {
+                // Escaneo de ubicación
+                const location = locations[Math.floor(Math.random() * locations.length)];
+                return {
+                    icon: '🔍',
+                    text: `Escaneando carpeta ${location}`,
+                    status: 'processing'
+                };
+            } else if (rand < 0.85) {
+                // Protección activada
+                const protections = [
+                    'Firewall actualizado',
+                    'Protección en tiempo real activada',
+                    'Definiciones de virus actualizadas',
+                    'Escudo web habilitado',
+                    'Protección de correo activada'
+                ];
+                return {
+                    icon: '🛡️',
+                    text: protections[Math.floor(Math.random() * protections.length)],
+                    status: 'success'
+                };
+            } else {
+                // Proceso verificado
+                const process = processes[Math.floor(Math.random() * processes.length)];
+                return {
+                    icon: '✅',
+                    text: `${process.charAt(0).toUpperCase() + process.slice(1)} verificado - Sin amenazas`,
+                    status: 'success'
+                };
+            }
+        }
+
+        function updateCounters() {
+            filesScannedEl.textContent = filesScanned.toLocaleString();
+            threatsFixedEl.textContent = threatsFixed.toLocaleString();
+        }
+
+        function updateProgress() {
+            progress += Math.random() * 0.8 + 0.2;
+            if (progress > 100) {
+                progress = 15 + Math.random() * 20;
+            }
+            const displayProgress = Math.min(Math.round(progress), 99);
+            progressFill.style.width = displayProgress + '%';
+            progressPercent.textContent = displayProgress + '%';
+        }
+
+        function updateStatus() {
+            const message = statusMessages[Math.floor(Math.random() * statusMessages.length)];
+            statusText.textContent = message;
+        }
+
+        function addActivity() {
+            const activity = generateUniqueActivity();
+
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item';
+
+            activityItem.innerHTML = `
+                <div class="activity-icon">${activity.icon}</div>
+                <div class="activity-text">${activity.text}</div>
+                <div class="activity-status status-${activity.status}">${activity.status === 'success' ? 'Completado' :
+                    activity.status === 'warning' ? 'Resuelto' : 'En curso'
+                }</div>
+            `;
+
+            activityContainer.insertBefore(activityItem, activityContainer.firstChild);
+
+            filesScanned++;
+            if (activity.status === 'warning' || activity.status === 'success') {
+                if (Math.random() > 0.5) {
+                    threatsFixed++;
+                }
+            }
+            updateCounters();
+
+            if (activityContainer.children.length > 5) {
+                activityContainer.removeChild(activityContainer.lastChild);
+            }
+        }
+
+        // Iniciar con algunas actividades
+        addActivity();
+        addActivity();
+        addActivity();
+
+        // Actualizar continuamente
+        setInterval(updateProgress, 1200);
+        setInterval(updateStatus, 3500);
+        setInterval(addActivity, 2500);
+    </script>
+</body>
+
+</html>
